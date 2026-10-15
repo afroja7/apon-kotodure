@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="আপনার মা, বাবা, ভাই, বোন আর বন্ধুরা কত কিলোমিটার, কত মাইল দূরে, আর পৌঁছাতে কত সময় লাগে দেখুন।">
+<title>আপনজন কত দূরে</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@600;700&family=Hind+Siliguri:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <div class="brand">
+    <h1>আপনজন কত দূরে</h1>
+    <p>আপনি কোথায় থাকেন আর আপনার মা, বাবা, ভাই, বোন, বন্ধুরা কোথায়, সেটা দিন। দেখুন কে কত কিলোমিটার, কত মাইল দূরে, আর পৌঁছাতে কত সময় লাগে।</p>
+  </div>
+  <div class="tabs" role="tablist">
+    <button id="tab-bd" role="tab" aria-selected="true" data-mode="bd">বাংলাদেশ</button>
+    <button id="tab-world" role="tab" aria-selected="false" data-mode="world">বিশ্ব</button>
+  </div>
+</header>
+
+<div class="grid">
+  <section>
+    <div class="mapbox" id="mapbox">
+      <svg id="map" role="img" aria-label="দূরত্বের মানচিত্র"></svg>
+      <div class="pickhint" id="pickhint" hidden></div>
+      <div class="maptools">
+        <button id="zin" title="বড় করুন" aria-label="বড় করুন">+</button>
+        <button id="zout" title="ছোট করুন" aria-label="ছোট করুন">−</button>
+        <button id="zreset" title="পুরো ম্যাপ" aria-label="পুরো ম্যাপ">⟲</button>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--family)"></i>পরিবার</span>
+        <span><i style="background:var(--friend)"></i>বন্ধু</span>
+        <span><i style="background:var(--other)"></i>আত্মীয় ও অন্যান্য</span>
+        <span><i style="background:var(--me);height:10px;width:10px;border-radius:50%"></i>আমি</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="examples" id="exbanner" hidden>
+      <span>এগুলো উদাহরণ। নিজের মানুষদের যোগ করতে উদাহরণগুলো মুছে দিন।</span>
+      <button class="btn small" id="clearEx">উদাহরণ মুছুন</button>
+    </div>
+
+    <div class="card">
+      <h2>আমি কোথায় থাকি</h2>
+      <div class="fields">
+        <div class="row">
+          <div class="grow"><label for="meInput" id="meLabel">জেলা</label><input id="meInput" list="placeList" autocomplete="off" placeholder="যেমন: নেত্রকোনা"></div>
+          <button class="btn" id="mePick" type="button">ম্যাপে বাছুন</button>
+        </div>
+        <div class="place-now" id="meNow"></div>
+        <div class="err" id="meErr"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>আপনজন যোগ করুন</h2>
+      <form class="fields" id="addForm" novalidate>
+        <div class="row">
+          <div class="grow"><label for="pName">নাম</label><input id="pName" placeholder="যেমন: রিমা আপু" maxlength="40"></div>
+          <div><label for="pRel">সম্পর্ক</label>
+            <select id="pRel">
+              <option>মা</option><option>বাবা</option><option>ভাই</option><option>বোন</option>
+              <option>স্বামী/স্ত্রী</option><option>সন্তান</option>
+              <option selected>বন্ধু</option><option>দূরের বন্ধু</option>
+              <option>আত্মীয়</option><option>অন্যান্য</option>
+            </select></div>
+        </div>
+        <div class="row">
+          <div class="grow"><label for="pPlace" id="pPlaceLabel">কোথায় থাকেন</label><input id="pPlace" list="placeList" autocomplete="off" placeholder="জেলার নাম লিখুন"></div>
+          <button class="btn" id="pPick" type="button">ম্যাপে বাছুন</button>
+        </div>
+        <div class="place-now" id="pNow"></div>
+        <div class="err" id="pErr"></div>
+        <button class="btn primary" type="submit">যোগ করুন</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>কে কত দূরে</h2>
+      <div class="summary" id="summary"></div>
+      <ul class="people" id="people" style="margin-top:12px"></ul>
+      <details style="margin-top:10px">
+        <summary>সময় কীভাবে হিসাব হয়</summary>
+        <p id="ruleText"></p>
+        <div class="row" id="speedRow"></div>
+      </details>
+    </div>
+  </section>
+</div>
+
+<div class="notes">
+  <p>সরলরেখার দূরত্ব মাপা হয়েছে দুই জায়গার মাঝে সরাসরি রেখা ধরে। বাংলাদেশ পাতায় সড়কপথের দূরত্ব এই সরলরেখার ১.৩ গুণ ধরে হিসাব করা আনুমানিক মান, যেমন ময়মনসিংহ থেকে চাঁদপুর প্রায় ২২২ কিমি দেখায়। আসল রাস্তার দূরত্ব ও যাত্রার সময় যানজট, রাস্তা আর যানবাহনের ওপর নির্ভর করে, তাই সময়গুলো আনুমানিক।</p>
+  <p>আপনার দেওয়া তথ্য শুধু এই ব্রাউজারে সংরক্ষিত থাকে, কোথাও পাঠানো হয় না।</p>
+  <p>তথ্যসূত্র: জেলার অবস্থান bangladesh-geocode (MIT), জেলার সীমানা ও বিশ্ব মানচিত্র Natural Earth, শহরের তালিকা GeoNames।</p>
+</div>
+</div>
+<datalist id="placeList"></datalist>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
